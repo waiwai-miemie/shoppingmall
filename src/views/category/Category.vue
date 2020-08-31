@@ -3,6 +3,7 @@
         <h2>分类</h2>
         <div class="wrapper" ref="aaa">
           <ul>
+          <button @click="btnClick">按钮</button>
           <li>1</li>
           <li>2</li>
           <li>3</li>
@@ -120,12 +121,23 @@ export default {
       // 选中.wrapper这个标签
       // 刷到底部或顶部时有弹簧效果
       console.log(this.$refs.aaa);
-      this.scroll = new BScroll(document.querySelector('.wrapper'),{})
+      this.scroll = new BScroll(document.querySelector('.wrapper'),{
+        ptobeType: 2,
+        click: true
+      });
+      this.scroll.on('scroll', (position) => {
+        console.log(position);
+      })
+    },
+    methods:{
+      btnClick(){
+        console.log('我被点击了');
+      }
     }
 }
 </script>
 <style scoped>
-  /* 样式这里必须写wrapper的样式，不能写ul，否则没有效果 */
+  /* 样式这里必须写wrapper的样式，不能写ul，否则没有效果，wrapper必须设置高度 */
   .wrapper {
     height: 150px;
     background-color: pink;
