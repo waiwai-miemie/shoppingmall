@@ -1,7 +1,10 @@
 <template>
   <div class="goods">
     <!-- 获取Home首页请求的数据，遍历生成每个小的商品，并将每个商品的信息传递给商品本身 -->
-    <goods-list-item :key="index" v-for="(item,index) in goods" :goodsItem="item" class="goods-item"></goods-list-item>
+    <goods-list-item :key="index"
+                     v-for="(item,index) in goods"
+                     :goodsItem="item"
+                     class="goods-item"></goods-list-item>
   </div>
 </template>
 <script>
