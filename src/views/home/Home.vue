@@ -48,10 +48,12 @@
           'sell': {page: 0, list: []},
         },
         currentType:'pop',
+        currentIndex: 0,
         isShow: false,
         offsetTop: 0,
         isTabConShow: false,
         saveY: 0,
+        defSaveY: [0, 0, 0],
         imgRefresh: null
       }
     },
@@ -87,15 +89,30 @@
       // 1、判断用户点击的是哪一个tab，传送对应的数据
       tabClick(index){
         // console.log(index);
+        // 当从别的高度小于offsetTop的tab切换的时候，为了保持吸顶，必须判断
+        this.isTabConShow = (-this.defSaveY[index]) >= this.offsetTop
+        // console.log(this.isTabConShow);
+        // console.log(this.defSaveY[index]);
+        // 小于吸顶距离的时候点击，直接滚动到吸顶位置
+        if(-this.defSaveY[index] <= this.offsetTop){
+          this.defSaveY[index] = -this.offsetTop;
+          this.$refs.scroll.scrollTo(0, this.defSaveY[index], 0);
+        }else {
+          // 大于吸顶距离滚动到对应tab保存的位置
+          this.$refs.scroll.scrollTo(0, this.defSaveY[index], 0);
+        }
         switch(index){
           case 0:
             this.currentType = 'pop';
+            this.currentIndex = 0;
             break;
           case 1:
             this.currentType = 'new';
+            this.currentIndex = 1;
             break;
           case 2:
             this.currentType = 'sell';
+            this.currentIndex = 2;
             break;
         }
         // currentIndex是在tabControl组件中设置的变量，当改变了其中一个另外一个也要跟着改变
@@ -110,8 +127,10 @@
       // 3、返回顶部按钮的显示与隐藏
       positionChange(position){
         this.isShow = -position.y > 1000
+        // 保存当前导航的滚动位置
+        this.defSaveY[this.currentIndex] = position.y;
         // 判断是否吸顶
-        this.isTabConShow = (-position.y) > this.offsetTop
+        this.isTabConShow = (-this.defSaveY[this.currentIndex]) >= this.offsetTop
       },
       // 4、加载更多图片
       loadMore(){
